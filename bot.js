@@ -8,14 +8,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ID або @username твого каналу
+// 🔗 Канал (публічний)
 const CHANNEL_ID = "@streets_wont_forget";
 
 // функція перевірки підписки
 async function checkSubscription(userId) {
   try {
     const member = await bot.telegram.getChatMember(CHANNEL_ID, userId);
-    // статуси: creator, administrator, member = підписаний
     if (["creator", "administrator", "member"].includes(member.status)) {
       return true;
     }
@@ -26,7 +25,7 @@ async function checkSubscription(userId) {
   }
 }
 
-// стартова команда
+// 📌 команда /start
 bot.start(async (ctx) => {
   const isSubscribed = await checkSubscription(ctx.from.id);
 
@@ -48,7 +47,7 @@ bot.start(async (ctx) => {
   }
 });
 
-// кнопка "Я підписався"
+// 📌 кнопка "Я підписався"
 bot.action("check_subscribe", async (ctx) => {
   const isSubscribed = await checkSubscription(ctx.from.id);
 
@@ -64,17 +63,39 @@ bot.action("check_subscribe", async (ctx) => {
   }
 });
 
-// прийом даних із Mini App
+// 📌 прийом даних через tg.sendData (якщо ти все ж таки будеш його юзати)
 bot.on("web_app_data", async (ctx) => {
   const isSubscribed = await checkSubscription(ctx.from.id);
-
   if (!isSubscribed) {
-    return ctx.reply("❌ Доступ заборонено! Підпишись на канал 👉 https://t.me/streets_wont_forget");
+    return ctx.reply("❌ Доступ заборонено! Підпишись 👉 https://t.me/streets_wont_forget");
   }
 
   const data = JSON.parse(ctx.message.web_app_data.data);
   ctx.reply(`Отримав від тебе: ${JSON.stringify(data)}`);
 });
 
-// запускаємо бота
+// 📌 API для Mini App (через fetch)
+app.post("/api/sendData", async (req, res) => {
+  const { userId, league, match } = req.body;
+
+  try {
+    const isSubscribed = await checkSubscription(userId);
+    if (!isSubscribed) {
+      return res.status(403).json({ ok: false, error: "Користувач не підписаний" });
+    }
+
+    await bot.telegram.sendMessage(
+      userId,
+      `📡 Нова заявка!\nЛіга: ${league}\nМатч: ${match}`
+    );
+
+    res.json({ ok: true });
+  } catch (err) {
+    console.error("Помилка надсилання:", err.message);
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// 📌 запуск
 bot.launch();
+app.listen(3000, () => console.log("✅ Server running on port 3000"));
