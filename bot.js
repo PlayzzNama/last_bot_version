@@ -34,7 +34,7 @@ bot.start(async (ctx) => {
     ctx.reply(
       "Привіт 👋 Ти підписаний ✅\nВідкрий Mini App:",
       Markup.inlineKeyboard([
-        [Markup.button.webApp("⚽ Відкрити", "https://твій-деплой.vercel.app")]
+        [Markup.button.webApp("⚽ Відкрити", "https://courageous-heliotrope-184d38.netlify.app/")]
       ])
     );
   } else {
@@ -56,7 +56,7 @@ bot.action("check_subscribe", async (ctx) => {
     ctx.reply(
       "✅ Доступ відкрито! Відкрий Mini App:",
       Markup.inlineKeyboard([
-        [Markup.button.webApp("⚽ Відкрити", "https://твій-деплой.vercel.app")]
+        [Markup.button.webApp("⚽ Відкрити", "https://courageous-heliotrope-184d38.netlify.app/")]
       ])
     );
   } else {
