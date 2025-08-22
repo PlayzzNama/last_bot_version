@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 // ID або @username твого каналу
-const CHANNEL_ID = "@live_fakultet_bot";
+const CHANNEL_ID = "@streets_wont_forget";
 
 // функція перевірки підписки
 async function checkSubscription(userId) {
@@ -39,9 +39,9 @@ bot.start(async (ctx) => {
     );
   } else {
     ctx.reply(
-      "❌ Для доступу підпишись на канал:\n👉 https://t.me/твій_канал",
+      "❌ Для доступу підпишись на канал:\n👉 https://t.me/streets_wont_forget",
       Markup.inlineKeyboard([
-        [Markup.button.url("🔗 Підписатись", "https://t.me/твій_канал")],
+        [Markup.button.url("🔗 Підписатись", "https://t.me/streets_wont_forget")],
         [Markup.button.callback("✅ Я підписався", "check_subscribe")]
       ])
     );
@@ -60,7 +60,7 @@ bot.action("check_subscribe", async (ctx) => {
       ])
     );
   } else {
-    ctx.reply("❌ Ти ще не підписався! 👉 https://t.me/твій_канал");
+    ctx.reply("❌ Ти ще не підписався! 👉 https://t.me/streets_wont_forget");
   }
 });
 
@@ -69,7 +69,7 @@ bot.on("web_app_data", async (ctx) => {
   const isSubscribed = await checkSubscription(ctx.from.id);
 
   if (!isSubscribed) {
-    return ctx.reply("❌ Доступ заборонено! Підпишись на канал 👉 https://t.me/твій_канал");
+    return ctx.reply("❌ Доступ заборонено! Підпишись на канал 👉 https://t.me/streets_wont_forget");
   }
 
   const data = JSON.parse(ctx.message.web_app_data.data);
