@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 // ID або @username твого каналу
-const CHANNEL_ID = "@твій_канал";
+const CHANNEL_ID = "@live_fakultet_bot";
 
 // функція перевірки підписки
 async function checkSubscription(userId) {
